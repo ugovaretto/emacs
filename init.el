@@ -6,6 +6,9 @@
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 (windmove-default-keybindings)
+(wrap-region-mode t)
+
+;;;; <packages
 ;; first, declare repositories
 (setq package-archives
       '(("gnu" . "http://elpa.gnu.org/packages/")
@@ -38,18 +41,18 @@
         ein
         doom-modeline
         doom-themes
-        auto-virtualenv))
+        auto-virtualenv
+        rustic))
 
 ;; Iterate on packages and install missing ones
 (dolist (pkg my-packages)
   (unless (package-installed-p pkg)
     (package-install pkg)))
+;;;; packages>
 ;; (load-theme 'material t)
+
+;;;; <Python 
 (elpy-enable)
-
-
-(wrap-region-mode t)
-
 ;; Enable Flycheck
 (when (require 'flycheck nil t)
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
@@ -66,10 +69,21 @@
 ;;(require 'py-autopep8)
 ;;(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 
+;;;; <Rust
+(require  'rustic)
+;;(setq :mode ("\\.rs$" . rustic-mode))
+;;(rustic-lsp-client 'eglot)
+;;(rustic-analyzer-command '("rustup" "run" "stable" "rust-analyzer"))
+;;;; Rust>
+
+(require 'auto-virtualenv)
+(add-hook 'python-mode-hook 'auto-virtualenv-set-virtualenv)
+;;;; Python>
+
 (require 'doom-modeline)
 (doom-modeline-mode 1)
-;; ----- language server
 
+;;;; <language server
 (require 'eglot)
 (add-hook 'python-mode-hook #'eglot-ensure)
 (add-to-list 'eglot-server-programs
@@ -77,18 +91,18 @@
 	       . ,(eglot-alternatives '("pylsp"
 					"jedi-language-server"
 					("pyright-langserver" "--stdio")))))
+;;;; language server>
 
-(use-package doom-themes
+;;;; <theme
+(use-package  doom-themes
   :ensure t
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
   (load-theme 'doom-monokai-pro t))
+;;;; theme>
 
-
-(require 'auto-virtualenv)
-(add-hook 'python-mode-hook 'auto-virtualenv-set-virtualenv)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (custom-set-variables
