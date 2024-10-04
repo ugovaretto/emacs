@@ -11,6 +11,7 @@
 (global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "S-C-<down>") 'shrink-window)
 (global-set-key (kbd "S-C-<up>") 'enlarge-window)
+
 ;;;; <packages
 ;; first, declare repositories
 (setq package-archives
@@ -51,7 +52,8 @@
         clang-format
         selectrum
         selectrum-prescient
-	rg))
+	rg
+	mark-multiple))
 
 ;; Iterate on packages and install missing ones
 (dolist (pkg my-packages)
@@ -60,17 +62,35 @@
 ;;;; packages>
 ;; (load-theme 'material t)
 
+;;;; <multiple cursors
+;; (require 'multiple-cursors)
+;; (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+;; (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+;; (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+;; (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(use-package mark-multiple
+  :ensure t
+  :bind ("C-c q" . 'mark-next-like-this))
+;;;; multiple cursors>
+
+
+;;;; <expand region
+(use-package expand-region
+  :ensure t
+  :bind ("C-q" . er/expand-region))
+;;;; expand region>
+
+;;;; <fuzzy finding
 (require 'rg)
 ;; (rg-enable-default-bindings)
 (rg-enable-menu)
-
+;;;; fuzzy finding>
 
 ;;;; <minibuffer completion
 ;; (use-package ido
 ;;   :config
 ;;   (setq ido-enable-flex-matching t)
 ;;   (ido-mode 1))
-
 ;;;; minibuffer completion>
 (use-package selectrum
   :ensure t
@@ -187,7 +207,7 @@
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-monokai-pro t))
+  (load-theme 'doom-monokai-ristretto t))
 ;;;; theme>
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -198,7 +218,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(cmake-mode lsp-mode elpy json-mode yaml-mode wrap-region paredit markdown-mode magit helm expand-region projectile)))
+   '(rainbow-mode mark-multiple cmake-mode lsp-mode elpy json-mode yaml-mode wrap-region paredit markdown-mode magit helm expand-region projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
