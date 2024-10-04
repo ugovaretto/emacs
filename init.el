@@ -7,7 +7,10 @@
 (setq display-line-numbers-type 'relative)
 (windmove-default-keybindings)
 (wrap-region-mode t)
-
+(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "S-C-<down>") 'shrink-window)
+(global-set-key (kbd "S-C-<up>") 'enlarge-window)
 ;;;; <packages
 ;; first, declare repositories
 (setq package-archives
@@ -42,7 +45,13 @@
         doom-modeline
         doom-themes
         auto-virtualenv
-        rustic))
+        rustic
+        company
+        modern-cpp-font-lock
+        clang-format
+        selectrum
+        selectrum-prescient
+	rg))
 
 ;; Iterate on packages and install missing ones
 (dolist (pkg my-packages)
@@ -50,6 +59,52 @@
     (package-install pkg)))
 ;;;; packages>
 ;; (load-theme 'material t)
+
+(require 'rg)
+;; (rg-enable-default-bindings)
+(rg-enable-menu)
+
+
+;;;; <minibuffer completion
+;; (use-package ido
+;;   :config
+;;   (setq ido-enable-flex-matching t)
+;;   (ido-mode 1))
+
+;;;; minibuffer completion>
+(use-package selectrum
+  :ensure t
+  :config
+  (selectrum-mode +1))
+
+(use-package selectrum-prescient
+  :ensure t
+  :config
+  (selectrum-prescient-mode +1)
+  (prescient-persist-mode +1))
+;;;; <projectile
+(require 'projectile)
+(projectile-mode +1)
+;; Recommended keymap prefix on Windows/Linux
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+(setq projectile-completion-system 'auto)
+;;;; projectile>
+
+
+;;;; <language server
+(require 'eglot)
+(add-hook 'python-mode-hook #'eglot-ensure)
+(add-to-list 'eglot-server-programs
+	     `(python-mode
+	       . ,(eglot-alternatives '("pylsp"
+					"jedi-language-server"
+					("pyright-langserver" "--stdio"))))
+       '((c++-mode c-mode) "clangd"))
+;;;; language server>
+
+;;;; <cmake
+(use-package cmake-mode)
+;;;; cmake>
 
 ;;;; <Python 
 (elpy-enable)
@@ -70,10 +125,16 @@
 ;;(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 
 ;;;; <Rust
-(require  'rustic)
+;;; (require  'rustic)
 ;;(setq :mode ("\\.rs$" . rustic-mode))
 ;;(rustic-lsp-client 'eglot)
 ;;(rustic-analyzer-command '("rustup" "run" "stable" "rust-analyzer"))
+(use-package rustic
+  :ensure t
+  :config
+  (setq rustic-format-on-save nil)
+  :custom
+  (rustic-cargo-use-last-stored-arguments t))
 ;;;; Rust>
 
 (require 'auto-virtualenv)
@@ -83,15 +144,41 @@
 (require 'doom-modeline)
 (doom-modeline-mode 1)
 
-;;;; <language server
+
+;;;; <c++
+;; (require 'eglot)
+;; (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+;; (add-hook 'c-mode-hook 'eglot-ensure)
+;; (add-hook 'c++-mode-hook 'eglot-ensure)
+;; (add-to-list 'eglot-server-programs
+;;     '((c-mode c++-mode)
+;;           . ("clangd"
+;;                 "-j=8"
+;;                 "--log=error"
+;;                 "--malloc-trim"
+;;                 "--background-index"
+;;                 "--clang-tidy"
+;;                 "--cross-file-rename"
+;;                 "--completion-style=detailed"
+;;                 "--pch-storage=memory"
+;;                 "--header-insertion=never"
+;;                 "--header-insertion-decorators=0")))
 (require 'eglot)
-(add-hook 'python-mode-hook #'eglot-ensure)
-(add-to-list 'eglot-server-programs
-	     `(python-mode
-	       . ,(eglot-alternatives '("pylsp"
-					"jedi-language-server"
-					("pyright-langserver" "--stdio")))))
-;;;; language server>
+(add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+(add-hook 'c-mode-hook 'eglot-ensure)
+(add-hook 'c++-mode-hook 'eglot-ensure)
+(require 'modern-cpp-font-lock)
+(modern-c++-font-lock-global-mode t)
+(require 'clang-format)
+(global-set-key (kbd "C-c i") 'clang-format-region)
+(global-set-key (kbd "C-c u") 'clang-format-buffer)
+(setq clang-format-style "file")
+;;;; c++>
+
+;;;; <autocompletion
+(require 'company)
+(add-hook 'after-init-hook 'global-company-mode)
+;;;; autocompletion>
 
 ;;;; <theme
 (use-package  doom-themes
@@ -111,7 +198,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(lsp-mode elpy json-mode yaml-mode wrap-region paredit markdown-mode magit helm expand-region projectile)))
+   '(cmake-mode lsp-mode elpy json-mode yaml-mode wrap-region paredit markdown-mode magit helm expand-region projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
