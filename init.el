@@ -2,16 +2,12 @@
 (menu-bar-mode 0)
 ;; (tool-bar-mode 0)
 ;; (scroll-bar-mode 0)
-(column-number-mode 0)
+(setq-default indent-tabs-mode nil)
+;;(column-number-mode 0)
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 (windmove-default-keybindings)
-(wrap-region-mode t)
-(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
-(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
-(global-set-key (kbd "S-C-<down>") 'shrink-window)
-(global-set-key (kbd "S-C-<up>") 'enlarge-window)
-
+(setq column-number-mode t)
 ;;;; <packages
 ;; first, declare repositories
 (setq package-archives
@@ -53,7 +49,9 @@
         selectrum
         selectrum-prescient
 	rg
-	mark-multiple))
+	mark-multiple
+	zenburn-theme
+	whitespace))
 
 ;; Iterate on packages and install missing ones
 (dolist (pkg my-packages)
@@ -62,12 +60,11 @@
 ;;;; packages>
 ;; (load-theme 'material t)
 
+(require 'whitespace)
+(setq whitespace-style '(face empty tabs lines-tail trailing))
+(global-whitespace-mode t)
+
 ;;;; <multiple cursors
-;; (require 'multiple-cursors)
-;; (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-;; (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-;; (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-;; (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 (use-package mark-multiple
   :ensure t
   :bind ("C-c q" . 'mark-next-like-this))
@@ -87,11 +84,6 @@
 ;;;; fuzzy finding>
 
 ;;;; <minibuffer completion
-;; (use-package ido
-;;   :config
-;;   (setq ido-enable-flex-matching t)
-;;   (ido-mode 1))
-;;;; minibuffer completion>
 (use-package selectrum
   :ensure t
   :config
@@ -118,8 +110,7 @@
 	     `(python-mode
 	       . ,(eglot-alternatives '("pylsp"
 					"jedi-language-server"
-					("pyright-langserver" "--stdio"))))
-       '((c++-mode c-mode) "clangd"))
+					("pyright-langserver" "--stdio")))))
 ;;;; language server>
 
 ;;;; <cmake
@@ -145,10 +136,6 @@
 ;;(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 
 ;;;; <Rust
-;;; (require  'rustic)
-;;(setq :mode ("\\.rs$" . rustic-mode))
-;;(rustic-lsp-client 'eglot)
-;;(rustic-analyzer-command '("rustup" "run" "stable" "rust-analyzer"))
 (use-package rustic
   :ensure t
   :config
@@ -166,23 +153,6 @@
 
 
 ;;;; <c++
-;; (require 'eglot)
-;; (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-;; (add-hook 'c-mode-hook 'eglot-ensure)
-;; (add-hook 'c++-mode-hook 'eglot-ensure)
-;; (add-to-list 'eglot-server-programs
-;;     '((c-mode c++-mode)
-;;           . ("clangd"
-;;                 "-j=8"
-;;                 "--log=error"
-;;                 "--malloc-trim"
-;;                 "--background-index"
-;;                 "--clang-tidy"
-;;                 "--cross-file-rename"
-;;                 "--completion-style=detailed"
-;;                 "--pch-storage=memory"
-;;                 "--header-insertion=never"
-;;                 "--header-insertion-decorators=0")))
 (require 'eglot)
 (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
 (add-hook 'c-mode-hook 'eglot-ensure)
@@ -199,26 +169,27 @@
 (require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
 ;;;; autocompletion>
+(load-theme 'zenburn t)
+(setq-default display-fill-column-indicator-column 79)
+(add-hook 'c++-mode-hook
+          (lambda () (display-fill-column-indicator-mode)))
+(add-hook 'c++-mode-hook (lambda () (set-face-attribute 'fill-column-indicator nil :background 'unspecified :foreground "slategray" :stipple '(7 1 " "))))
 
-;;;; <theme
-(use-package  doom-themes
-  :ensure t
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-monokai-ristretto t))
-;;;; theme>
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (use-package  doom-themes
+;;   :ensure t
+;;   :config
+;;   ;; Global settings (defaults)
+;;   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+;;         doom-themes-enable-italic t) ; if nil, italics is universally disabled
+;;   (load-theme 'doom-monokai-ristretto t))
+;; ;;;; theme>
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(rainbow-mode mark-multiple cmake-mode lsp-mode elpy json-mode yaml-mode wrap-region paredit markdown-mode magit helm expand-region projectile)))
+   '(zenburn-theme yaml-mode wrap-region which-key selectrum-prescient rustic rg rainbow-mode py-autopep8 projectile paredit multiple-cursors modern-cpp-font-lock material-theme mark-multiple magit lsp-ui lsp-treemacs json-mode helm-lsp expand-region elpy ein doom-themes doom-modeline cmake-mode clang-format ccls blacken auto-virtualenv)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
