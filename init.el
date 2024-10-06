@@ -1,4 +1,4 @@
-(setq inhibit-startup-message t) 
+(setq inhibit-startup-message t)
 (menu-bar-mode 0)
 ;; (tool-bar-mode 0)
 ;; (scroll-bar-mode 0)
@@ -8,17 +8,19 @@
 (setq display-line-numbers-type 'relative)
 (windmove-default-keybindings)
 (setq column-number-mode t)
-;;;; <packages
+
+;;;;;;;;;; PACKAGES ;;;;;;;;;;
 ;; first, declare repositories
 (setq package-archives
       '(("gnu" . "http://elpa.gnu.org/packages/")
         ("marmalade" . "http://marmalade-repo.org/packages/")
         ("melpa" . "http://melpa.org/packages/")))
 
+
 ;; Init the package facility
 (require 'package)
 (package-initialize)
-;; (package-refresh-contents) ;; this line is commented 
+;; (package-refresh-contents) ;; this line is commented
 ;; since refreshing packages is time-consuming and should be done on demand
 
 ;; Declare packages
@@ -48,42 +50,40 @@
         clang-format
         selectrum
         selectrum-prescient
-	rg
-	mark-multiple
-	zenburn-theme
-	whitespace))
+        rg
+        mark-multiple
+        zenburn-theme
+        whitespace
+        elixir-mode))
 
 ;; Iterate on packages and install missing ones
 (dolist (pkg my-packages)
   (unless (package-installed-p pkg)
     (package-install pkg)))
-;;;; packages>
-;; (load-theme 'material t)
 
+;;;;;;;;;; MULTIPLE CURSORS ;;;;;;;;;;
 (require 'whitespace)
 (setq whitespace-style '(face empty tabs lines-tail trailing))
 (global-whitespace-mode t)
 
-;;;; <multiple cursors
+;;;;;;;;;; MARK MULTIPLE ;;;;;;;;;;
 (use-package mark-multiple
   :ensure t
   :bind ("C-c q" . 'mark-next-like-this))
-;;;; multiple cursors>
 
+;;;;;;;;;; WRAP REGION ;;;;;;;;;;
+(wrap-region-mode t)
 
-;;;; <expand region
+;;;;;;;;;; EXPAND REGION ;;;;;;;;;;
 (use-package expand-region
   :ensure t
   :bind ("C-q" . er/expand-region))
-;;;; expand region>
 
-;;;; <fuzzy finding
+;;;;;;;;;; FUZZY FINDING ;;;;;;;;;;
 (require 'rg)
-;; (rg-enable-default-bindings)
 (rg-enable-menu)
-;;;; fuzzy finding>
 
-;;;; <minibuffer completion
+;;;;;;;;;; MINIBUFFER COMPLETION ;;;;;;;;;;
 (use-package selectrum
   :ensure t
   :config
@@ -94,30 +94,28 @@
   :config
   (selectrum-prescient-mode +1)
   (prescient-persist-mode +1))
-;;;; <projectile
+
+;;;;;;;;;; PROJECTILE ;;;;;;;;;;
 (require 'projectile)
 (projectile-mode +1)
 ;; Recommended keymap prefix on Windows/Linux
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 (setq projectile-completion-system 'auto)
-;;;; projectile>
 
-
-;;;; <language server
+;;;;;;;;;; LANGUAGE SERVER ;;;;;;;;;;
 (require 'eglot)
 (add-hook 'python-mode-hook #'eglot-ensure)
 (add-to-list 'eglot-server-programs
-	     `(python-mode
-	       . ,(eglot-alternatives '("pylsp"
-					"jedi-language-server"
-					("pyright-langserver" "--stdio")))))
-;;;; language server>
+             `(python-mode
+               . ,(eglot-alternatives '("pylsp"
+                                        "jedi-language-server"
+                                        ("pyright-langserver" "--stdio")))))
 
-;;;; <cmake
+;;;;;;;;;; CMAKE ;;;;;;;;;;
 (use-package cmake-mode)
-;;;; cmake>
 
-;;;; <Python 
+
+;;;;;;;;;; PYTHON ;;;;;;;;;;
 (elpy-enable)
 ;; Enable Flycheck
 (when (require 'flycheck nil t)
@@ -130,29 +128,43 @@
       python-shell-prompt-detect-failure-warning nil)
 (add-to-list 'python-shell-completion-native-disabled-interpreters
              "jupyter")
+(require 'auto-virtualenv)
+(add-hook 'python-mode-hook 'auto-virtualenv-set-virtualenv)
 
 ;; Enable autopep8
 ;;(require 'py-autopep8)
 ;;(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 
-;;;; <Rust
+;;;;;;;;;; RUST ;;;;;;;;;;
 (use-package rustic
   :ensure t
   :config
   (setq rustic-format-on-save nil)
   :custom
   (rustic-cargo-use-last-stored-arguments t))
-;;;; Rust>
 
-(require 'auto-virtualenv)
-(add-hook 'python-mode-hook 'auto-virtualenv-set-virtualenv)
-;;;; Python>
-
+;;;;;;;;;; MODELINE ;;;;;;;;;;
 (require 'doom-modeline)
 (doom-modeline-mode 1)
 
+;;;;;;;;;; ELIXIR ;;;;;;;;;;
+(require 'elixir-mode)
+(defun install-elixir-ls ()
+  (let ((path (concat user-emacs-directory "/elixir-ls")))
+    (shell-command
+     (concat "git clone https://github.com/elixir-lsp/elixir-ls.git " path))
+        (cd path)
+        (shell-command "mix deps.get")
+        (shell-command "mix elixir_ls.release2")))
 
-;;;; <c++
+(if (not (file-exists-p (concat user-emacs-directory "/elixir-ls")))
+    (install-elixir-ls) ())
+(require 'eglot)
+(add-to-list 'eglot-server-programs
+             '(elixir-mode (concact user-emacs-directory
+                                    "/elixir-ls/release/language_server.sh")))
+
+;;;;;;;;;; C++ ;;;;;;;;;;
 (require 'eglot)
 (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
 (add-hook 'c-mode-hook 'eglot-ensure)
@@ -163,26 +175,28 @@
 (global-set-key (kbd "C-c i") 'clang-format-region)
 (global-set-key (kbd "C-c u") 'clang-format-buffer)
 (setq clang-format-style "file")
-;;;; c++>
 
-;;;; <autocompletion
+;;;;;;;;;; AUTOCOMPLETION ;;;;;;;;;;
 (require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
-;;;; autocompletion>
+
+;;;;;;;;;; THEME ;;;;;;;;;;
 (load-theme 'zenburn t)
+
+;;;;;;;;;; LINES > 80 COLUMNS ;;;;;;;;;;
 (setq-default display-fill-column-indicator-column 79)
 (add-hook 'c++-mode-hook
           (lambda () (display-fill-column-indicator-mode)))
-(add-hook 'c++-mode-hook (lambda () (set-face-attribute 'fill-column-indicator nil :background 'unspecified :foreground "slategray" :stipple '(7 1 " "))))
+(add-hook 'c++-mode-hook (lambda () (set-face-attribute
+                                     'fill-column-indicator nil
+                                     :background 'unspecified
+                                     :foreground "slategray"
+                                     :stipple '(7 1 " "))))
 
-;; (use-package  doom-themes
-;;   :ensure t
-;;   :config
-;;   ;; Global settings (defaults)
-;;   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-;;         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-;;   (load-theme 'doom-monokai-ristretto t))
-;; ;;;; theme>
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
