@@ -150,12 +150,14 @@
 ;;;;;;;;;; ELIXIR ;;;;;;;;;;
 (require 'elixir-mode)
 (defun install-elixir-ls ()
-  (let ((path (concat user-emacs-directory "/elixir-ls")))
+  (let ((cur-dir (pwd)) (path (concat user-emacs-directory "/elixir-ls")))
     (shell-command
      (concat "git clone https://github.com/elixir-lsp/elixir-ls.git " path))
-        (cd path)
-        (shell-command "mix deps.get")
-        (shell-command "mix elixir_ls.release2")))
+    (cd path)
+    (shell-command "mix deps.get")
+    (shell-command "mix elixir_ls.release2"))
+    (cd cur-dir)
+ )
 
 (if (not (file-exists-p (concat user-emacs-directory "/elixir-ls")))
     (install-elixir-ls) ())
