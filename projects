@@ -1,2 +1,6 @@
 ;;; -*- lisp-data -*-
-(("/Users/ugo/projects/s3client/"))
+(("~/exercism/elixir/dna-encoding/")
+ ("~/exercism/")
+ ("/Users/ugo/exercism/elixir/dna-encoding/")
+ ("/Users/ugo/exercism/")
+ ("/Users/ugo/projects/s3client/"))

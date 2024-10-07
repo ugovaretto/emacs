@@ -25,7 +25,7 @@
 
 ;; Declare packages
 (setq my-packages
-      '(projectile
+      '(;;projectile
         expand-region
         helm
         magit
@@ -95,12 +95,15 @@
   (selectrum-prescient-mode +1)
   (prescient-persist-mode +1))
 
-;;;;;;;;;; PROJECTILE ;;;;;;;;;;
-(require 'projectile)
-(projectile-mode +1)
-;; Recommended keymap prefix on Windows/Linux
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-(setq projectile-completion-system 'auto)
+;;;;;;;;;; PROJECT ;;;;;;;;;;
+(require 'project)
+(setq project-vc-extra-root-markers '(".project.el" ".projectile" ))
+;; ;;;;;;;;;; PROJECTILE ;;;;;;;;;;
+;; (require 'projectile)
+;; (projectile-mode +1)
+;; ;; Recommended keymap prefix on Windows/Linux
+;; (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+;; (setq projectile-completion-system 'auto)
 
 ;;;;;;;;;; LANGUAGE SERVER ;;;;;;;;;;
 (require 'eglot)
