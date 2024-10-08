@@ -3,7 +3,7 @@
 ;; (tool-bar-mode 0)
 ;; (scroll-bar-mode 0)
 (setq-default indent-tabs-mode nil)
-;;(column-number-mode 0)
+(column-number-mode 0)
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 (windmove-default-keybindings)
@@ -42,7 +42,7 @@
         blacken
         ein
         doom-modeline
-        doom-themes
+        ;;doom-themes
         auto-virtualenv
         rustic
         company
@@ -54,7 +54,9 @@
         mark-multiple
         zenburn-theme
         whitespace
-        elixir-mode))
+        elixir-mode
+        minions
+        moody))
 
 ;; Iterate on packages and install missing ones
 (dolist (pkg my-packages)
@@ -147,6 +149,8 @@
   (rustic-cargo-use-last-stored-arguments t))
 
 ;;;;;;;;;; MODELINE ;;;;;;;;;;
+(require 'minions)
+(keymap-global-set "C-." #'minions-minor-modes-menu)
 (require 'doom-modeline)
 (doom-modeline-mode 1)
 

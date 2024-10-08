@@ -46,3 +46,6 @@ C-c q: mark-next-like-this
 
 ### Expand Region
 C-q: expand-region
+
+### Minions
+C-.: show all minor modes in menu
