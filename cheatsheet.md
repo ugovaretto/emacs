@@ -1,3 +1,4 @@
+# Key bindings
 
 C-g: reset status
 C--: undo
@@ -29,13 +30,19 @@ M-g M-p: prev compile error
 
 Elisp: C-j at end of elisp expression in scratch buffer
 
-## From packages
+# From packages
 
-C-c p: projectile:
-	* f fuzzy find file
-	
-C-c q: mark-multiple: mark-next-like-this
+### xref
+1. Install Universal CTags
+2. Run `etags -e -R .` to in roor directory to generate `TAGS` file.
 
+M-.: go to reference or file under cursor.
+
+### Project
+C-x p f: fuzzy find file
+
+### Mark Multiple
+C-c q: mark-next-like-this
+
+### Expand Region
 C-q: expand-region
-
-python mode:
