@@ -68,7 +68,10 @@ C-x-q: toggle buffer writable (to e.g. rename multiple files)
 M-.: go to reference or file under cursor.
 
 ### Project
+Add `.project.el` or `.projectile` file in root directory to turn
+directory into a project folder.
 C-x p f: fuzzy find file
+C-x p p: list projects
 
 ### Mark Multiple
 C-c q: mark-next-like-this
