@@ -56,7 +56,8 @@
         whitespace
         elixir-mode
         minions
-        moody))
+        moody
+        zig-mode))
 
 ;; Iterate on packages and install missing ones
 (dolist (pkg my-packages)
@@ -190,6 +191,13 @@
 (global-set-key (kbd "C-c i") 'clang-format-region)
 (global-set-key (kbd "C-c u") 'clang-format-buffer)
 (setq clang-format-style "file")
+
+;;;;;;;;;; ZIG ;;;;;;;;;;
+(use-package
+ eglot
+ :ensure nil
+ :config (add-to-list 'eglot-server-programs '(zig-mode "zls")))
+(add-hook 'zig-mode-hook 'eglot-ensure)
 
 ;;;;;;;;;; AUTOCOMPLETION ;;;;;;;;;;
 (require 'company)
