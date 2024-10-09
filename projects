@@ -1,7 +1,7 @@
 ;;; -*- lisp-data -*-
-(("~/.config/emacs/")
+(("~/exercism/elixir/dna-encoding/")
+ ("~/.config/emacs/")
  ("~/projects/s3client/")
- ("~/exercism/elixir/dna-encoding/")
  ("~/exercism/")
  ("/Users/ugo/exercism/elixir/dna-encoding/")
  ("/Users/ugo/exercism/")

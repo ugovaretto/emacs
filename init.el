@@ -100,6 +100,7 @@
 ;;;;;;;;;; PROJECT ;;;;;;;;;;
 (require 'project)
 (setq project-vc-extra-root-markers '(".project.el" ".projectile" ))
+
 ;; ;;;;;;;;;; PROJECTILE ;;;;;;;;;;
 ;; (require 'projectile)
 ;; (projectile-mode +1)
@@ -155,9 +156,10 @@
 (doom-modeline-mode 1)
 
 ;;;;;;;;;; ELIXIR ;;;;;;;;;;
-(require 'elixir-mode)
+(use-package elixir-mode
+  :ensure t)
 (defun install-elixir-ls ()
-  (let ((cur-dir (pwd)) (path (concat user-emacs-directory "/elixir-ls")))
+  (let ((cur-dir (pwd)) (path (concat user-emacs-directory "elixir-ls")))
     (shell-command
      (concat "git clone https://github.com/elixir-lsp/elixir-ls.git " path))
     (cd path)
@@ -166,12 +168,16 @@
     (cd cur-dir)
  )
 
-(if (not (file-exists-p (concat user-emacs-directory "/elixir-ls")))
+(if (not (file-exists-p (concat user-emacs-directory "elixir-ls")))
     (install-elixir-ls) ())
-(require 'eglot)
-(add-to-list 'eglot-server-programs
-             '(elixir-mode (concact user-emacs-directory
-                                    "/elixir-ls/release/language_server.sh")))
+
+(defconst elixir-ls-path (concat user-emacs-directory "elixir-ls/release/language_server.sh"))
+(use-package
+ eglot
+ :ensure nil
+ :config (add-to-list 'eglot-server-programs `(elixir-mode ,elixir-ls-path)))
+
+(add-hook 'elixir-mode-hook 'eglot-ensure)
 
 ;;;;;;;;;; C++ ;;;;;;;;;;
 (require 'eglot)
