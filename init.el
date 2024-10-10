@@ -31,45 +31,46 @@
 ;; Declare packages
 (setq my-packages
       '(;;projectile
-        expand-region
-        helm
-        magit
-        markdown-mode
-        paredit
-        wrap-region
-        yaml-mode
-        json-mode
-        elpy
-        eglot
-        material-theme
-        flycheck
-        py-autopep8
-        blacken
-        ein
-        doom-modeline
         ;;doom-themes
         auto-virtualenv
-        rustic
-        company
-        modern-cpp-font-lock
+        blacken
         clang-format
-        selectrum
-        selectrum-prescient
-        rg
-        mark-multiple
-        zenburn-theme
-        whitespace
+        company
+        consult
+        doom-modeline
+        eglot
+        ein
         elixir-mode
-        minions
-        moody
-        zig-mode
-        marginalia
+        elpy
         embark
         embark-consult
-        consult
-        which-key
+        expand-region
+        flycheck
+        helm
+        json-mode
+        magit
+        marginalia
+        mark-multiple
+        markdown-mode
+        material-theme
+        minions
+        modern-cpp-font-lock
+        moody
+        paredit
+        py-autopep8
         rainbow-delimiters
-        swift-mode))
+        rg
+        rustic
+        selectrum
+        selectrum-prescient
+        swift-mode
+        which-key
+        whitespace
+        wrap-region
+        yaml-mode
+        yasnippet
+        zenburn-theme
+        zig-mode))
 
 ;; Iterate on packages and install missing ones
 (dolist (pkg my-packages)
@@ -134,6 +135,16 @@
                . ,(eglot-alternatives '("pylsp"
                                         "jedi-language-server"
                                         ("pyright-langserver" "--stdio")))))
+;;;;;;;;;; SNIPPETS ;;;;;;;;;;
+(use-package yasnippet
+  :ensure t
+  :config
+  (setq yas-snippet-dirs `(,(concat user-emacs-directory "snippets")))
+  (yas-global-mode 1))
+
+(define-key yas-minor-mode-map (kbd "<tab>") nil)
+(define-key yas-minor-mode-map (kbd "TAB") nil)
+(define-key yas-minor-mode-map (kbd "C-e") 'yas-expand)
 
 ;;;;;;;;;; CMAKE ;;;;;;;;;;
 (use-package cmake-mode

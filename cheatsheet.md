@@ -4,7 +4,7 @@ Use `~/.config/emacs` as root directory on Mac an Linux.
 Use `use-package` to install and configure packages.
 Put `.dir-locals.el` in any directory to create per-folder/project configuarations.
 `early-init.el` is run before `init.el` if present.
-
+(electric-pair-mode): automatically add matching parentheses.
 
 # Key bindings
 
