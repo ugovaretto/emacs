@@ -115,3 +115,4 @@ consult-theme: change theme.
 ### Yasnippet
 yas/new-snippet: new snippet
 yas/visit-snippet-file: edit snippet file.
+C-e: expand snippet.
