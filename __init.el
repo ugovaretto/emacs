@@ -129,8 +129,7 @@
                                         ("pyright-langserver" "--stdio")))))
 
 ;;;;;;;;;; CMAKE ;;;;;;;;;;
-(use-package cmake-mode
-  :ensure t)
+(use-package cmake-mode)
 
 
 ;;;;;;;;;; PYTHON ;;;;;;;;;;
@@ -269,8 +268,8 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
-(use-package which-key
-  :ensure t)
+(use-package which-key :ensure t)
+(which-key-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -287,3 +286,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+[
