@@ -6,6 +6,14 @@ Put `.dir-locals.el` in any directory to create per-folder/project configuaratio
 `early-init.el` is run before `init.el` if present.
 (electric-pair-mode): automatically add matching parentheses.
 
+### Best themes: 
+
+* zenburn (low contrast)
+* doom-zenburn (low contras, higher contrast than zenburn)
+* doom-rouge (high contrast)
+* misterioso (mid contrast)
+* modus-vivendi (high contrast)
+
 # Key bindings
 
 C-g: reset status
@@ -98,3 +106,12 @@ class variables it shows the keys to use to "go to definition" or "show referenc
 No keybindings just press on any key combination and wait for a second to
 display the list of possible keybindings e.g. 'C-x-' will show 'p'
 for project/projectile, 'f' for search file etc.
+
+### Consult
+consult-imenu: show list of symbols e.g. in c++ all functions or classes.
+consult-flymake: go to errors/warnings.
+consult-theme: change theme.
+
+### Yasnippet
+yas/new-snippet: new snippet
+yas/visit-snippet-file: edit snippet file.
