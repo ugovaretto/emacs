@@ -67,7 +67,9 @@
         embark
         embark-consult
         consult
-        which-key))
+        which-key
+        rainbow-delimiters
+        swift-mode))
 
 ;; Iterate on packages and install missing ones
 (dolist (pkg my-packages)
@@ -107,6 +109,11 @@
   :config
   (selectrum-prescient-mode +1)
   (prescient-persist-mode +1))
+
+;;;;;;;;;; RAINBOW DELIMITERS ;;;;;;;;;;
+(use-package rainbow-delimiters
+    :ensure t
+    :hook ((prog-mode . rainbow-delimiters-mode)))
 
 ;;;;;;;;;; PROJECT ;;;;;;;;;;
 (require 'project)
@@ -186,7 +193,7 @@
 (defconst elixir-ls-path (concat user-emacs-directory "elixir-ls/release/language_server.sh"))
 (use-package
  eglot
- :ensure nil
+ :ensure t
  :config (add-to-list 'eglot-server-programs `(elixir-mode ,elixir-ls-path)))
 
 (add-hook 'elixir-mode-hook 'eglot-ensure)
@@ -206,9 +213,17 @@
 ;;;;;;;;;; ZIG ;;;;;;;;;;
 (use-package
  eglot
- :ensure nil
+ :ensure t
  :config (add-to-list 'eglot-server-programs '(zig-mode "zls")))
 (add-hook 'zig-mode-hook 'eglot-ensure)
+
+;;;;;;;;;; SWIFT ;;;;;;;;;;
+(use-package
+ eglot
+ :ensure t
+ :config (add-to-list 'eglot-server-programs '(swift-mode "sourcekit-lsp")))
+(add-hook 'swift-mode-hook 'eglot-ensure)
+
 
 ;;;;;;;;;; AUTOCOMPLETION ;;;;;;;;;;
 (require 'company)

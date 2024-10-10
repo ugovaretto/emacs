@@ -88,3 +88,13 @@ C-q: expand-region
 
 ### Minions
 C-.: show all minor modes in menu
+
+### Embark
+C-.: on target will show all the relevant actions
+that can be performed on that target e.g. on  C++
+class variables it shows the keys to use to "go to definition" or "show references" etc.
+
+### Which key
+No keybindings just press on any key combination and wait for a second to
+display the list of possible keybindings e.g. 'C-x-' will show 'p'
+for project/projectile, 'f' for search file etc.
