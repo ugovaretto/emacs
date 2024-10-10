@@ -1,3 +1,11 @@
+# Configuration
+
+Use `~/.config/emacs` as root directory on Mac an Linux.
+Use `use-package` to install and configure packages.
+Put `.dir-locals.el` in any directory to create per-folder/project configuarations.
+`early-init.el` is run before `init.el` if present.
+
+
 # Key bindings
 
 C-g: reset status
@@ -49,7 +57,6 @@ C-x t o: next tab
 Elisp: C-j at end of elisp expression in scratch buffer
 
 
-
 ## Dired
 C-x d
 C-x d *.cpp only list file ending with ".cpp"
@@ -59,13 +66,13 @@ c: compress
 C: copy
 C-x-q: toggle buffer writable (to e.g. rename multiple files)
 
-# From packages
+# From external packages
 
 ### xref
 1. Install Universal CTags
 2. Run `etags -e -R .` to in roor directory to generate `TAGS` file.
 
-M-.: go to reference or file under cursor.
+M-.: go to reference or file under cursor. Works with LSP as well without explicit TAG generation.
 
 ### Project
 Add `.project.el` or `.projectile` file in root directory to turn
