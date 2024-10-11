@@ -8,6 +8,7 @@
 (setq display-line-numbers-type 'relative)
 (windmove-default-keybindings)
 (setq column-number-mode t)
+(add-hook 'prog-mode-hook #'electric-pair-mode)
 
 ;;;;;;;;;; PACKAGES ;;;;;;;;;;
 ;; first, declare repositories
@@ -78,6 +79,27 @@
   (unless (package-installed-p pkg)
     (package-install pkg)))
 
+;;;;;;;;;; Customize Rainbow Delimiters. ;;;;;;;;;;
+(require 'rainbow-delimiters)
+(set-face-foreground 'rainbow-delimiters-depth-1-face "#c66")  ; red
+(set-face-foreground 'rainbow-delimiters-depth-2-face "#6c6")  ; green
+(set-face-foreground 'rainbow-delimiters-depth-3-face "#69f")  ; blue
+(set-face-foreground 'rainbow-delimiters-depth-4-face "#cc6")  ; yellow
+(set-face-foreground 'rainbow-delimiters-depth-5-face "#6cc")  ; cyan
+(set-face-foreground 'rainbow-delimiters-depth-6-face "#c6c")  ; magenta
+(set-face-foreground 'rainbow-delimiters-depth-7-face "#ccc")  ; light gray
+(set-face-foreground 'rainbow-delimiters-depth-8-face "#999")  ; medium gray
+(set-face-foreground 'rainbow-delimiters-depth-9-face "#666")  ; dark gray
+(set-face-bold 'rainbow-delimiters-depth-1-face t)
+(set-face-bold 'rainbow-delimiters-depth-2-face t)
+(set-face-bold 'rainbow-delimiters-depth-3-face t)
+(set-face-bold 'rainbow-delimiters-depth-4-face t)
+(set-face-bold 'rainbow-delimiters-depth-5-face t)
+(set-face-bold 'rainbow-delimiters-depth-6-face t)
+(set-face-bold 'rainbow-delimiters-depth-7-face t)
+(set-face-bold 'rainbow-delimiters-depth-8-face t)
+(set-face-bold 'rainbow-delimiters-depth-9-face t)
+
 ;;;;;;;;;; MULTIPLE CURSORS ;;;;;;;;;;
 (require 'whitespace)
 (setq whitespace-style '(face empty tabs lines-tail trailing))
@@ -115,7 +137,9 @@
 ;;;;;;;;;; RAINBOW DELIMITERS ;;;;;;;;;;
 (use-package rainbow-delimiters
     :ensure t
-    :hook ((prog-mode . rainbow-delimiters-mode)))
+    :hook ((prog-mode . rainbow-delimiters-mode)
+           (lisp-mode . rainbow-delimiters-mode)
+           (sly-mode . rainbow-delimiters-mode)))
 
 ;;;;;;;;;; PROJECT ;;;;;;;;;;
 (require 'project)
