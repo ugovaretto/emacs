@@ -63,6 +63,7 @@
         rustic
         selectrum
         selectrum-prescient
+        sly
         swift-mode
         which-key
         whitespace
@@ -144,7 +145,7 @@
 
 (define-key yas-minor-mode-map (kbd "<tab>") nil)
 (define-key yas-minor-mode-map (kbd "TAB") nil)
-(define-key yas-minor-mode-map (kbd "C-e") 'yas-expand)
+(define-key yas-minor-mode-map (kbd "C-S-e") 'yas-expand)
 
 ;;;;;;;;;; CMAKE ;;;;;;;;;;
 (use-package cmake-mode
@@ -243,6 +244,13 @@
 ;;;;;;;;;; THEME ;;;;;;;;;;
 (load-theme 'zenburn t)
 
+;;;;;;;;;; LISP ;;;;;;;;;;
+;; Follow instructions here:
+;; https://github.com/rabbibotton/clog?tab=readme-ov-file
+(use-package sly
+  :ensure t)
+(setq inferior-lisp-program "sbcl")
+
 ;;;;;;;;;; LINES > 80 COLUMNS ;;;;;;;;;;
 (setq-default display-fill-column-indicator-column 79)
 (add-hook 'c++-mode-hook
@@ -252,6 +260,7 @@
                                      :background 'unspecified
                                      :foreground "slategray"
                                      :stipple '(7 1 " "))))
+
 
 ;;;;;;;;;; COMMAND/KEYS COMPLETION ;;;;;;;;;;
 (use-package marginalia
