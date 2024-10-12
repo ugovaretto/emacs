@@ -33,11 +33,15 @@
 (setq my-packages
       '(;;projectile
         ;;doom-themes
+        ;;slime
+        ;;slime-company
+        ;;ac-slime
         auto-virtualenv
         blacken
         clang-format
         company
         consult
+        dired-preview
         doom-modeline
         eglot
         ein
@@ -64,7 +68,6 @@
         rustic
         selectrum
         selectrum-prescient
-        sly
         swift-mode
         which-key
         whitespace
@@ -122,6 +125,12 @@
 (require 'rg)
 (rg-enable-menu)
 
+
+;; (define-key company-active-map (kbd "\C-n") 'company-select-next)
+;; (define-key company-active-map (kbd "\C-p") 'company-select-previous)
+;; (define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
+;; (define-key company-active-map (kbd "M-.") 'company-show-location)
+
 ;;;;;;;;;; MINIBUFFER COMPLETION ;;;;;;;;;;
 (use-package selectrum
   :ensure t
@@ -139,7 +148,9 @@
     :ensure t
     :hook ((prog-mode . rainbow-delimiters-mode)
            (lisp-mode . rainbow-delimiters-mode)
-           (sly-mode . rainbow-delimiters-mode)))
+           (sly-mode . rainbow-delimiters-mode)
+           ;;(slime-repl-mode . rainbow-delimiters-mode)
+           ))
 
 ;;;;;;;;;; PROJECT ;;;;;;;;;;
 (require 'project)
@@ -271,10 +282,25 @@
 ;;;;;;;;;; LISP ;;;;;;;;;;
 ;; Follow instructions here:
 ;; https://github.com/rabbibotton/clog?tab=readme-ov-file
+;; SLIME
+;; (use-package slime
+;;   :ensure t
+;;   :config '(slime-fancy slime-quicklisp slime-asdf slime-mrepl slime-company))
+;; (use-package slime-company
+;;   :after (slime company)
+;;   :config (setq slime-company-completion 'fuzzy
+;;                 slime-company-after-completion 'slime-company-just-one-space))
+;; (require 'ac-slime)
+;; (add-hook 'slime-mode-hook 'set-up-slime-ac)
+;; (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+;; (eval-after-load "auto-complete"
+;;   '(add-to-list 'ac-modes 'slime-repl-mode))
+;; (setq ac-auto-show-menu 0.3)
+
+;;SLY
 (use-package sly
   :ensure t)
 (setq inferior-lisp-program "sbcl")
-
 ;;;;;;;;;; LINES > 80 COLUMNS ;;;;;;;;;;
 (setq-default display-fill-column-indicator-column 79)
 (add-hook 'c++-mode-hook

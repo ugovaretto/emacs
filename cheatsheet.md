@@ -6,7 +6,41 @@ Put `.dir-locals.el` in any directory to create per-folder/project configuaratio
 `early-init.el` is run before `init.el` if present.
 (electric-pair-mode): automatically add matching parentheses.
 
-### Best themes: 
+
+## Install SBCL and package manager:
+
+After installing SBCL (e.g. `brew install sbcl` on MacOS):
+
+### 1. Install `quicklisp`
+```sh
+curl -o /tmp/ql.lisp http://beta.quicklisp.org/quicklisp.lisp
+sbcl --no-sysinit --no-userinit --load /tmp/ql.lisp \
+       --eval '(quicklisp-quickstart:install :path "~/.quicklisp")' \
+       --eval '(ql:add-to-init-file)' \
+       --quit
+```
+
+### 2. Install *ultralisp* disttribution
+```sh
+sbcl --eval '(ql-dist:install-dist "http://dist.ultralisp.org/" :prompt nil)' --eval '(ql:update-all-dists)' --quit
+
+```
+
+### 3. (Optional) Install CLOG (GUI/Web)
+```sh
+sbcl --eval '(ql:quickload :clog/tools)' --eval '(clog-tools:clog-builder)'
+```
+
+### 4. Install *SLY* or *SLIME* on Emacs
+
+
+### Updated packages
+
+(ql:update-dist "ultralisp")
+(ql:update-dist "quicklisp")
+
+
+### Best themes:
 
 * zenburn (low contrast)
 * doom-zenburn (low contras, higher contrast than zenburn)
@@ -14,9 +48,67 @@ Put `.dir-locals.el` in any directory to create per-folder/project configuaratio
 * misterioso (mid contrast)
 * modus-vivendi (high contrast)
 
+Use `consult-theme` to change theme.
+
+## Select lisp implementation
+
+### SLIME
+
+```lisp
+;; CCL (ClosureCL)
+(setq u:*ccl-home*  (concat u:*home* "Library/CCL/"))
+(setq u:*ccl-init*  (concat u:*shared* "ccl-init.lisp"))
+(setq u:*ccl-exec*  (concat u:*ccl-home* "ccl/dx86cl64"))
+(setenv "CCL_DEFAULT_DIRECTORY" (concat u:*ccl-home* "ccl"))
+
+;; SBCL
+(setq u:*sbcl-home* (concat u:*home* "Library/sbcl/"))
+(setq u:*sbcl-init* (concat u:*shared* "sbcl-init.lisp"))
+
+(setq-default slime-lisp-implementations
+  `((sbcl  ("/usr/local/bin/sbcl" "--userinit" ,u:*sbcl-init*) :coding-system utf-8-unix)
+     (ccl   (,u:*ccl-exec* "-n" "-l" ,u:*ccl-init*) :coding-system utf-8-unix)))
+
+(defmacro define-slime-lisp (name)
+  `(defun ,name ()  (interactive)  (let ((slime-default-lisp ',name))  (slime))))
+
+(define-slime-lisp sbcl)
+(define-slime-lisp ccl)
+```
+OR
+
+```lisp
+(setq slime-lisp-implementations
+      '((sbcl ("/opt/sbcl/bin/sbcl" "--core" "/opt/sbcl/lib/sbcl/sbcl.core")
+              :coding-system utf-8-unix
+              :env ("SBCL_HOME=/opt/sbcl/lib/sbcl"))
+        (ccl ("/opt/ccl/lx86cl64")
+             :coding-system utf-8-unix)))
+(require 'slime-autoloads)
+```
+
+
+### SLY
+
+```lisp
+(setq-default sly-lisp-implementations
+              `((sbcl  ("sbcl") :coding-system utf-8-unix)
+                (ccl   ("~/Downloads/2018-06/ccl/lx86cl64")
+                       :coding-system utf-8-unix)))
+
+(defmacro define-sly-lisp (name)
+  `(defun ,name ()  (interactive)  (let ((sly-default-lisp ',name))  (sly))))
+
+(define-sly-lisp sbcl)
+(define-sly-lisp ccl)
+```
+
 # Key bindings
 
 C-g: reset status
+C-x {: reduce horizonatal window size (C-u <N> to reduce by N characters)
+C-x }: increase horizonal window size (C-u <N> to increase by N characters)
+C-X ^: change vertical window size (use negative numbers to shrink + C-u)
 C-/: undo
 C-S-/: redo
 M-y: browse kill ring
@@ -116,3 +208,9 @@ consult-theme: change theme.
 yas/new-snippet: new snippet
 yas/visit-snippet-file: edit snippet file.
 C-e: expand snippet.
+
+### SLY
+C-r: history, keep pressing C-r to go back, '<space> expands last item added.
+
+### Which-key
+Enable by invoking `which-key-mode`.
