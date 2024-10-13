@@ -43,6 +43,7 @@ sbcl --eval '(ql:quickload :clog/tools)' --eval '(clog-tools:clog-builder)'
 ### Best themes:
 
 * zenburn (low contrast)
+* doom-toyo-night (mid contrast)
 * doom-zenburn (low contras, higher contrast than zenburn)
 * doom-rouge (high contrast)
 * misterioso (mid contrast)
