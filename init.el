@@ -1,7 +1,7 @@
 (setq inhibit-startup-message t)
-(if (boundp 'menu-bar-mode) (menu-bar-mode 0) nil)
-(if (boundp 'tool-bar-mode) (tool-bar-mode 0) nil)
-(if (boundp 'scroll-bar-mode) (scroll-bar-mode 0) nil)
+(if (fboundp 'menu-bar-mode) (menu-bar-mode 0) nil)
+(if (fboundp 'tool-bar-mode) (tool-bar-mode 0) nil)
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode 0) nil)
 (setq-default indent-tabs-mode nil)
 (column-number-mode 0)
 (global-display-line-numbers-mode)
@@ -34,7 +34,7 @@
       '(;;projectile
         ;;doom-themes
         ;;sly
-        ac-slime
+        ;;ac-slime
         auto-virtualenv
         blacken
         clang-format
@@ -287,12 +287,12 @@
   :after (slime company)
   :config (setq slime-company-completion 'fuzzy
                 slime-company-after-completion 'slime-company-just-one-space))
-(require 'ac-slime)
-(add-hook 'slime-mode-hook 'set-up-slime-ac)
-(add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-(eval-after-load "auto-complete"
-  '(add-to-list 'ac-modes 'slime-repl-mode))
-(setq ac-auto-show-menu 0.3)
+;; (require 'ac-slime)
+;; (add-hook 'slime-mode-hook 'set-up-slime-ac)
+;; (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+;; (eval-after-load "auto-complete"
+;;   '(add-to-list 'ac-modes 'slime-repl-mode))
+;; (setq ac-auto-show-menu 0.3)
 
 ;;SLY
 ;;(use-package sly
