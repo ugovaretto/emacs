@@ -9,7 +9,8 @@
 (windmove-default-keybindings)
 (setq column-number-mode t)
 (add-hook 'prog-mode-hook #'electric-pair-mode)
-
+;; possibly helping in not getting sly stuck
+(setq-default comint-process-echoes 'off)
 ;;;;;;;;;; PACKAGES ;;;;;;;;;;
 ;; first, declare repositories
 (setq package-archives
@@ -33,8 +34,8 @@
 (setq my-packages
       '(;;projectile
         ;;doom-themes
-        ;;sly
         ;;ac-slime
+        ;;slime
         auto-virtualenv
         blacken
         clang-format
@@ -67,8 +68,7 @@
         rustic
         selectrum
         selectrum-prescient
-        slime
-        slime-company
+        sly
         swift-mode
         which-key
         whitespace
@@ -143,8 +143,8 @@
     :ensure t
     :hook ((prog-mode . rainbow-delimiters-mode)
            (lisp-mode . rainbow-delimiters-mode)
-           ;; (sly-mode . rainbow-delimiters-mode)
-           (slime-repl-mode . rainbow-delimiters-mode)
+           (sly-mode . rainbow-delimiters-mode)
+           ;;(slime-repl-mode . rainbow-delimiters-mode)
            ))
 
 ;;;;;;;;;; PROJECT ;;;;;;;;;;
@@ -275,28 +275,29 @@
 (load-theme 'zenburn t)
 
 ;;;;;;;;;; LISP ;;;;;;;;;;
-;; Follow instructions here:
-;; https://github.com/rabbibotton/clog?tab=readme-ov-file
-;; SLIME
-(use-package slime
-  :ensure t
-  :config '(slime-fancy slime-quicklisp slime-asdf slime-mrepl slime-company)
-  :hook ((slime-repl-mode . auto-complete-mode)))
+;; ;; Follow instructions here:
+;; ;; https://github.com/rabbibotton/clog?tab=readme-ov-file
+;; ;; SLIME
+;; (use-package slime
+;;   :ensure t
+;;   :config '(slime-fancy slime-quicklisp slime-asdf slime-mrepl slime-company)
+;;   :hook ((slime-repl-mode . auto-complete-mode)))
 
-(use-package slime-company
-  :after (slime company)
-  :config (setq slime-company-completion 'fuzzy
-                slime-company-after-completion 'slime-company-just-one-space))
-;; (require 'ac-slime)
-;; (add-hook 'slime-mode-hook 'set-up-slime-ac)
-;; (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-;; (eval-after-load "auto-complete"
-;;   '(add-to-list 'ac-modes 'slime-repl-mode))
-;; (setq ac-auto-show-menu 0.3)
+;; (use-package slime-company
+;;   :after (slime company)
+;;   :config (setq slime-company-completion 'fuzzy
+;;                 slime-company-after-completion 'slime-company-just-one-space))
+;; ;; (require 'ac-slime)
+;; ;; (add-hook 'slime-mode-hook 'set-up-slime-ac)
+;; ;; (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+;; ;; (eval-after-load "auto-complete"
+;; ;;   '(add-to-list 'ac-modes 'slime-repl-mode))
+;; ;; (setq ac-auto-show-menu 0.3)
 
 ;;SLY
-;;(use-package sly
-;;  :ensure t)
+(use-package sly
+  :ensure t)
+(setq sly-complete-symbol-function 'sly-flex-completions)
 
 (setq inferior-lisp-program "sbcl")
 ;;;;;;;;;; LINES > 80 COLUMNS ;;;;;;;;;;
