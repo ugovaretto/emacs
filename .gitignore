@@ -54,3 +54,4 @@ flycheck_*.el
 **/rpc-venv
 elixir-ls
 url
+recentf
