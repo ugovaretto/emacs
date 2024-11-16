@@ -9,17 +9,29 @@
 (setq display-line-numbers-type 'relative)
 (windmove-default-keybindings)
 (setq column-number-mode t)
+(global-set-key (kbd "C-z") 'undo)
+
 (add-hook 'prog-mode-hook #'electric-pair-mode)
 ;; possibly helping in not getting sly stuck
 (setq-default comint-process-echoes 'off)
+
+;;;;;;;;;; LATEX ;;;;;;;;;;
+(setq org-format-latex-options
+      '(:foreground default :background default
+                    :scale 1.6 :html-foreground default
+                    :html-background default :html-scale 1.0
+                    :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
+
+
+consu
 ;;;;;;;;;; PACKAGES ;;;;;;;;;;
 ;; first, declare repositories
 (setq package-archives
-      '(("gnu" . "http://elpa.gnu.org/packages/")
+      '(("nongnu" . "https://elpa.nongnu.org/nongnu/" )
+        ("gnu" . "http://elpa.gnu.org/packages/")
        ;; ("marmalade" . "http://marmalade-repo.org/packages/")
-        ("melpa" . "http://melpa.org/packages/")
-        ("nongnu" . "https://elpa.nongnu.org/nongnu/" )))
-
+        ("melpa" . "http://melpa.org/packages/")))
+(setq package-check-signature nil)
 
 ;; Init the package facility
 (require 'package)
@@ -42,6 +54,7 @@
         clang-format
         company
         consult
+        darkroom
         dired-preview
         doom-modeline
         eglot
@@ -73,6 +86,7 @@
         selectrum-prescient
         sly
         swift-mode
+        symbols-outline
         vterm
         which-key
         whitespace
@@ -98,7 +112,7 @@
 
 ;;;;;;;;;; LIGATURES ;;;;;;;;;;
 (use-package ligature
-  :load-path "path-to-ligature-repo"
+  ;; :load-path "path-to-ligature-repo"
   :config
   ;; Enable the "www" ligature in every possible major mode
   (ligature-set-ligatures 't '("www"))
@@ -107,63 +121,19 @@
   (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
   ;; Enable all Cascadia and Fira Code ligatures in programming modes
   (ligature-set-ligatures 'prog-mode
-                          '(;; == === ==== => =| =>>=>=|=>==>> ==< =/=//=// =~
-                            ;; =:= =!=
-                            ("=" (rx (+ (or ">" "<" "|" "/" "~" ":" "!" "="))))
-                            ;; ;; ;;;
-                            (";" (rx (+ ";")))
-                            ;; && &&&
-                            ("&" (rx (+ "&")))
-                            ;; !! !!! !. !: !!. != !== !~
-                            ("!" (rx (+ (or "=" "!" "\." ":" "~"))))
-                            ;; ?? ??? ?:  ?=  ?.
-                            ("?" (rx (or ":" "=" "\." (+ "?"))))
-                            ;; %% %%%
-                            ("%" (rx (+ "%")))
-                            ;; |> ||> |||> ||||> |] |} || ||| |-> ||-||
-                            ;; |->>-||-<<-| |- |== ||=||
-                            ;; |==>>==<<==<=>==//==/=!==:===>
-                            ("|" (rx (+ (or ">" "<" "|" "/" ":" "!" "}" "\]"
-                                            "-" "=" ))))
-                            ;; \\ \\\ \/
-                            ("\\" (rx (or "/" (+ "\\"))))
-                            ;; ++ +++ ++++ +>
-                            ("+" (rx (or ">" (+ "+"))))
-                            ;; :: ::: :::: :> :< := :// ::=
-                            (":" (rx (or ">" "<" "=" "//" ":=" (+ ":"))))
-                            ;; // /// //// /\ /* /> /===:===!=//===>>==>==/
-                            ("/" (rx (+ (or ">"  "<" "|" "/" "\\" "\*" ":" "!"
-                                            "="))))
-                            ;; .. ... .... .= .- .? ..= ..<
-                            ("\." (rx (or "=" "-" "\?" "\.=" "\.<" (+ "\."))))
-                            ;; -- --- ---- -~ -> ->> -| -|->-->>->--<<-|
-                            ("-" (rx (+ (or ">" "<" "|" "~" "-"))))
-                            ;; *> */ *)  ** *** ****
-                            ("*" (rx (or ">" "/" ")" (+ "*"))))
-                            ;; www wwww
-                            ("w" (rx (+ "w")))
-                            ;; <> <!-- <|> <: <~ <~> <~~ <+ <* <$ </  <+> <*>
-                            ;; <$> </> <|  <||  <||| <|||| <- <-| <-<<-|-> <->>
-                            ;; <<-> <= <=> <<==<<==>=|=>==/==//=!==:=>
-                            ;; << <<< <<<<
-                            ("<" (rx (+ (or "\+" "\*" "\$" "<" ">" ":" "~"  "!"
-                                            "-"  "/" "|" "="))))
-                            ;; >: >- >>- >--|-> >>-|-> >= >== >>== >=|=:=>>
-                            ;; >> >>> >>>>
-                            (">" (rx (+ (or ">" "<" "|" "/" ":" "=" "-"))))
-                            ;; #: #= #! #( #? #[ #{ #_ #_( ## ### #####
-                            ("#" (rx (or ":" "=" "!" "(" "\?" "\[" "{" "_(" "_"
-                                         (+ "#"))))
-                            ;; ~~ ~~~ ~=  ~-  ~@ ~> ~~>
-                            ("~" (rx (or ">" "=" "-" "@" "~>" (+ "~"))))
-                            ;; __ ___ ____ _|_ __|____|_
-                            ("_" (rx (+ (or "_" "|"))))
-                            ;; Fira code: 0xFF 0x12
-                            ("0" (rx (and "x" (+ (in "A-F" "a-f" "0-9")))))
-                            ;; Fira code:
-                            "Fl"  "Tl"  "fi"  "fj"  "fl"  "ft"
-                            ;; The few not covered by the regexps.
-                            "{|"  "[|"  "]#"  "(*"  "}#"  "$>"  "^="))
+                  '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+                    ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+                    "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+                    "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+                    "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+                    "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+                    "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+                    "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+                    ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+                    "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+                    "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+                    "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+                    "\\\\" "://"))
   ;; Enables ligature checks globally in all buffers. You can also do it
   ;; per mode with `ligature-mode'.
   (global-ligature-mode t))
@@ -363,7 +333,7 @@
 
 ;;;;;;;;;; THEME ;;;;;;;;;;
 ;; (load-theme 'zenburn t)
-(load-theme 'misterioso t)
+(load-theme 'heroku t)
 
 ;;;;;;;;;; LISP ;;;;;;;;;;
 ;; ;; Follow instructions here:
@@ -386,9 +356,6 @@
 ;; ;; (setq ac-auto-show-menu 0.3)
 
 ;;SLY
-(use-package sly
-  :ensure t)
-(setq sly-complete-symbol-function 'sly-flex-completions)
 
 ;; Allegro CL MacOS
 ;; (setq inferior-lisp-program "/Applications/AllegroCL64express.app/Contents/Resources/alisp")
@@ -399,6 +366,12 @@
 ;; ECL
 ;;(setq inferior-lisp-program "ecl")
 
+;; CLASP - unusable, too slow
+;; (setq inferior-lisp-program "clasp")
+
+;; CCL - does not work with SLY, keeps polling
+;;(setq inferior-lisp-program "ccl")
+
 ;;;;;;;;;; LINES > 80 COLUMNS ;;;;;;;;;;
 (setq-default display-fill-column-indicator-column 79)
 (add-hook 'c++-mode-hook
@@ -408,7 +381,9 @@
                                      :background 'unspecified
                                      :foreground "slategray"
                                      :stipple '(7 1 " "))))
-
+(use-package sly
+  :ensure t)
+(setq sly-complete-symbol-function 'sly-flex-completions)
 
 ;;;;;;;;;; COMMAND/KEYS COMPLETION ;;;;;;;;;;
 (use-package marginalia
@@ -455,6 +430,22 @@
 (use-package which-key
   :ensure t)
 
+;;;;;;;;;; SYMBOLS OUTLINE ;;;;;;;;;;
+(use-package symbols-outline
+  :ensure t)
+(global-set-key (kbd "C-c i") 'symbols-outline-show)
+(with-eval-after-load 'symbols-outline
+  ;; By default the ctags backend is selected
+  (unless (executable-find "ctags")
+    ;; Use lsp-mode or eglot as backend
+    (setq symbols-outline-fetch-fn #'symbols-outline-lsp-fetch))
+  (setq symbols-outline-window-position 'right)
+  (symbols-outline-follow-mode))
+
+;;;;;;;;;; ZEN MODE ;;;;;;;;;;
+(use-package darkroom
+  :ensure t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (custom-set-variables
@@ -462,8 +453,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-agenda-files
+   '("/Users/ugo/projects/ugovaretto-education/emacs/org/todo-1.org"))
  '(package-selected-packages
-   '(ellama ligature vterm zenburn-theme yaml-mode wrap-region which-key selectrum-prescient rustic rg rainbow-mode py-autopep8 projectile paredit multiple-cursors modern-cpp-font-lock material-theme mark-multiple magit lsp-ui lsp-treemacs json-mode helm-lsp expand-region elpy ein doom-themes doom-modeline cmake-mode clang-format ccls blacken auto-virtualenv)))
+   '(ob-latex-as-png latex-preview-pane org-superstar a org-bullets spacemacs-theme org-super-agenda visual-fill-column org-modern geiser-racket modus-themes lsp-focus focus darkroom eat heroku-theme ef-themes cl-format symbols-outline geiser-chez flycheck-guile geiser-guile geiser pdf-tools ellama ligature vterm zenburn-theme yaml-mode wrap-region which-key selectrum-prescient rustic rg rainbow-mode py-autopep8 projectile paredit multiple-cursors modern-cpp-font-lock material-theme mark-multiple magit lsp-ui lsp-treemacs json-mode helm-lsp expand-region elpy ein doom-themes doom-modeline cmake-mode clang-format ccls blacken auto-virtualenv)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
