@@ -15,15 +15,6 @@
 ;; possibly helping in not getting sly stuck
 (setq-default comint-process-echoes 'off)
 
-;;;;;;;;;; LATEX ;;;;;;;;;;
-(setq org-format-latex-options
-      '(:foreground default :background default
-                    :scale 1.6 :html-foreground default
-                    :html-background default :html-scale 1.0
-                    :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
-
-
-consu
 ;;;;;;;;;; PACKAGES ;;;;;;;;;;
 ;; first, declare repositories
 (setq package-archives
@@ -76,6 +67,7 @@ consu
         minions
         modern-cpp-font-lock
         moody
+        org
         paredit
         py-autopep8
         rainbow-delimiters
@@ -332,8 +324,8 @@ consu
 (add-hook 'after-init-hook 'global-company-mode)
 
 ;;;;;;;;;; THEME ;;;;;;;;;;
-;; (load-theme 'zenburn t)
-(load-theme 'heroku t)
+(load-theme 'zenburn t)
+;;(load-theme 'doom-one t)
 
 ;;;;;;;;;; LISP ;;;;;;;;;;
 ;; ;; Follow instructions here:
@@ -446,6 +438,22 @@ consu
 (use-package darkroom
   :ensure t)
 
+;;;;;;;;;; ORG MODE ;;;;;;;;;;
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (lisp . t)
+   (python . t)
+   (scheme .t )
+   (C . t)))
+
+;;  LATEX ;;
+(setq org-format-latex-options
+      '(:foreground default :background default
+                    :scale 1.6 :html-foreground default
+                    :html-background default :html-scale 1.0
+                    :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (custom-set-variables
@@ -453,10 +461,10 @@ consu
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-agenda-files
-   '("/Users/ugo/projects/ugovaretto-education/emacs/org/todo-1.org"))
+ '(custom-safe-themes
+   '("0325a6b5eea7e5febae709dab35ec8648908af12cf2d2b569bedc8da0a3a81c1" default))
  '(package-selected-packages
-   '(ob-latex-as-png latex-preview-pane org-superstar a org-bullets spacemacs-theme org-super-agenda visual-fill-column org-modern geiser-racket modus-themes lsp-focus focus darkroom eat heroku-theme ef-themes cl-format symbols-outline geiser-chez flycheck-guile geiser-guile geiser pdf-tools ellama ligature vterm zenburn-theme yaml-mode wrap-region which-key selectrum-prescient rustic rg rainbow-mode py-autopep8 projectile paredit multiple-cursors modern-cpp-font-lock material-theme mark-multiple magit lsp-ui lsp-treemacs json-mode helm-lsp expand-region elpy ein doom-themes doom-modeline cmake-mode clang-format ccls blacken auto-virtualenv)))
+   '(geiser-racket geiser ob-latex-as-png latex-preview-pane org-superstar a org-bullets spacemacs-theme org-super-agenda visual-fill-column org-modern modus-themes lsp-focus focus darkroom eat heroku-theme ef-themes cl-format symbols-outline pdf-tools ellama ligature vterm zenburn-theme yaml-mode wrap-region which-key selectrum-prescient rustic rg rainbow-mode py-autopep8 projectile paredit multiple-cursors modern-cpp-font-lock material-theme mark-multiple magit lsp-ui lsp-treemacs json-mode helm-lsp expand-region elpy ein doom-themes doom-modeline cmake-mode clang-format ccls blacken auto-virtualenv)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
